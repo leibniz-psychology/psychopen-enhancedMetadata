@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "form": "author",
+  "hideOJSDefaultRoles": true,
+  "items": [
+	{
+	  "type": "checkbox",
+	  "inline": false,
+	  "class": "em-margin-bottom-1",
+	  "title": {
+		"class": "",
+		"en_US": "Contributorship role(s)"
+	  },
+	  "description": {
+		"class": "",
+		"en_US": "Please insert for each author the contributorship role(s) they played. Each role may be occupied by several authors, and each author may occupy several roles."
+	  },
+	  "fields": [
+		{
+		  "name": "en_author-1",
+		  "desc": {
+			"en_US": "Idea, conceptualization"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-2",
+		  "desc": {
+			"en_US": "Design planning"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-3",
+		  "desc": {
+			"en_US": "Research implementation (software, hardware, etc.)"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-4",
+		  "desc": {
+			"en_US": "Data collection"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-5",
+		  "desc": {
+			"en_US": "Data management (storage, analysis, visualization, etc.)"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-6",
+		  "desc": {
+			"en_US": "Data analysis"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-7",
+		  "desc": {
+			"en_US": "Writing"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-8",
+		  "desc": {
+			"en_US": "Feedback, revisions"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-9",
+		  "desc": {
+			"en_US": "Research coordination, administration, supervision"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-10",
+		  "desc": {
+			"en_US": "Resources, funding"
+		  },
+		  "value": 1
+		},
+		{
+		  "name": "en_author-11",
+		  "desc": {
+			"en_US": "Other"
+		  },
+		  "value": 1
+		}
+	  ]
+	}
+  ]
+}

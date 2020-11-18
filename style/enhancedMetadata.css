@@ -1,0 +1,48 @@
+.em-hidden-field {
+    display: none;
+}
+
+.em-inline {
+    display: inline-flex;
+    margin-right: 15px;
+}
+
+.em-font-weight-normal {
+    /*font-weight: normal !important;*/
+}
+
+.em-font-14px {
+    font-size: 14px !important;
+}
+
+.em-section-radio {
+
+}
+
+.em-margin-top-2 {
+    margin-top: 60px !important;
+}
+
+.em-margin-bottom-2 {
+    margin-bottom: 60px !important;
+}
+
+.em-margin-bottom-1 {
+    margin-bottom: 10px !important;
+}
+
+.em-text-center {
+    text-align: center;
+}
+
+.em-font-italic {
+    font-style: italic;
+}
+
+.em-border-bottom {
+    border-bottom: 1px solid black;
+}
+
+.em-margin-left {
+    margin-left: 20px;
+}

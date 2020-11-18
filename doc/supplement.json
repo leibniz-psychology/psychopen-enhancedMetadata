@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "form": "supplement",
+  "items": [
+	{
+	  "type": "headline",
+	  "class": "em-margin-bottom-1 em-border-bottom em-margin-top-2",
+	  "title": {
+		"class": "em-text-center ",
+		"en_US": "REVIEWING"
+	  }
+	},
+	{
+	  "type": "checkbox",
+	  "inline": false,
+	  "class": "em-margin-bottom-1",
+	  "title": {
+		"class": "em-font-weight-normal em-font-14px",
+		"en_US": "If you wish a blind review where our names are undisclosed, please make sure that no information in the paper, accompanying supplemental materials, or weblinks contain your names."
+	  },
+	  "fields": [
+		{
+		  "name": "en_paper-10",
+		  "desc": {
+			"en_US": "Understood"
+		  },
+		  "value": 1
+		}
+	  ]
+	}
+  ]
+}

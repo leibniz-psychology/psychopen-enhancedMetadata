@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "form": "submission",
+  "items": [
+	{
+	  "type": "headline",
+	  "class": "example-class ...",
+	  "title": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet",
+		"de_DE": "Lorem ipsum dolor sit amet"
+	  },
+	  "description": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
+		"de_DE": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+	  }
+	},
+	{
+	  "type": "radio",
+	  "inline": true,
+	  "name": "uniqueName_1",
+	  "class": "example-class ...",
+	  "title": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet",
+		"de_DE": "Lorem ipsum dolor sit amet"
+	  },
+	  "description": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
+		"de_DE": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+	  },
+	  "fields": [
+		{
+		  "desc": {
+			"en_US": "Yes",
+			"de_DE": "Ja"
+		  },
+		  "value": "Y",
+		  "class": "example-class ..."
+		},
+		{
+		  "desc": {
+			"en_US": "No",
+			"de_DE": "Nein"
+		  },
+		  "value": "N",
+		  "class": "example-class ..."
+		},
+		{
+		  "desc": {
+			"en_US": "N/A",
+			"de_DE": "K.A."
+		  },
+		  "value": "NA",
+		  "class": "example-class ...",
+		  "selected": true
+		}
+	  ]
+	},
+	{
+	  "type": "textarea",
+	  "class": "example-class ...",
+	  "title": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet",
+		"de_DE": "Lorem ipsum dolor sit amet"
+	  },
+	  "description": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
+		"de_DE": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+	  },
+	  "fields": [
+		{
+		  "name": "uniqueName_2",
+		  "maxLength": 500,
+		  "rich": true,
+		  "multilingual": false,
+		  "required": false,
+		  "class": "example-class ...",
+		  "size": "large"
+		}
+	  ],
+	  "condition": {
+		"item": "uniqueName_1",
+		"value": "Y"
+	  }
+	},
+	{
+	  "type": "checkbox",
+	  "inline": true,
+	  "class": "example-class ...",
+	  "title": {
+		"de_DE": "Lorem ipsum dolor sit amet",
+		"en_US": "Lorem ipsum dolor sit amet"
+	  },
+	  "description": {
+		"de_DE": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
+		"en_US": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+	  },
+	  "fields": [
+		{
+		  "name": "uniqueName_3",
+		  "desc": {
+			"de_DE": "Lorem ipsum dolor sit amet",
+			"en_US": "Lorem ipsum dolor sit amet"
+		  },
+		  "value": 1,
+		  "required": true
+		},
+		{
+		  "name": "uniqueName_4",
+		  "desc": {
+			"de_DE": "Lorem ipsum dolor sit amet",
+			"en_US": "Lorem ipsum dolor sit amet"
+		  },
+		  "value": 1,
+		  "required": false
+		}
+	  ],
+	  "condition": {
+		"item": "uniqueName_1",
+		"value": "Y"
+	  }
+	},
+	{
+	  "type": "text",
+	  "class": "example-class ...",
+	  "title": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet",
+		"de_DE": "Lorem ipsum dolor sit amet"
+	  },
+	  "description": {
+		"class": "example-class ...",
+		"en_US": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
+		"de_DE": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+	  },
+	  "fields": [
+		{
+		  "name": "uniqueName",
+		  "maxLength": 500,
+		  "multilingual": false,
+		  "required": false,
+		  "class": "example-class ...",
+		  "size": "small"
+		}
+	  ],
+	  "condition": {
+		"item": "uniqueName_4",
+		"value": 1
+	  }
+	}
+  ]
+}
