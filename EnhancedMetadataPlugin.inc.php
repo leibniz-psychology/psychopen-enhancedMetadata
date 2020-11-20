@@ -1,7 +1,4 @@
 <?php
-/* TODO remove noinspection*/
-/** @noinspection PhpUnusedParameterInspection */
-/** @noinspection PhpUnused */
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('lib.pkp.classes.form.validation.FormValidatorLength');
 
@@ -9,7 +6,6 @@ import('lib.pkp.classes.form.validation.FormValidatorLength');
 /**
  * Class EnhancedMetadataPlugin
  *
- * To make this work in 3.1.2.x add parent::execute(); in execute function(L137) of \lib\pkp\controllers\wizard\fileUpload\form\SubmissionFilesMetadataForm.inc.php
  */
 class EnhancedMetadataPlugin extends GenericPlugin
 {
@@ -46,13 +42,13 @@ class EnhancedMetadataPlugin extends GenericPlugin
 	// TODO remove no ispection
 
 	/** @noinspection PhpParamsInspection */
-	public function register($category, $path, $mainContextId = NULL)
+	public function register($category, $path, $mainContextId = null)
 	{
 		$success = parent::register($category, $path);
-		$request = PKPApplication::getRequest();
+		$request = PKPApplication::get()->getRequest();
 		$context = $request->getContext();
 		$user = $request->getUser();
-		if(isset($user) && isset($context)) {
+		if (isset($user) && isset($context)) {
 			$accessViaRole = $user->hasRole(array(ROLE_ID_AUTHOR, ROLE_ID_MANAGER), $context->getId());
 			if ($success && $this->getEnabled() && $accessViaRole) {
 				// Add metadata fields to submission
@@ -80,7 +76,8 @@ class EnhancedMetadataPlugin extends GenericPlugin
 				HookRegistry::register('authorform::execute', array($this, 'metadataFormExecute'));
 				HookRegistry::register('supplementaryfilemetadataform::execute', array($this, 'metadataFormExecute'));
 				// Hook for save into db
-				HookRegistry::register('articledao::getAdditionalFieldNames', array($this, 'addAdditionalFieldNames'));
+				HookRegistry::register('Publication::getProperties::summaryProperties', array($this, 'modifyObjectProperties'));
+				HookRegistry::register('Publication::getProperties::fullProperties', array($this, 'modifyObjectProperties'));
 				HookRegistry::register('authordao::getAdditionalFieldNames', array($this, 'addAdditionalFieldNames'));
 				HookRegistry::register('supplementaryfiledaodelegate::getLocaleFieldNames', array($this, 'addAdditionalFieldNames'));
 				// View Hooks
@@ -88,7 +85,16 @@ class EnhancedMetadataPlugin extends GenericPlugin
 				HookRegistry::register('advancedsearchreviewerform::display', array($this, 'metadataFormDisplay'));
 			}
 		}
+
 		return $success;
+	}
+
+	public function modifyObjectProperties($hookName, $args)
+	{
+		$props =& $args[0];
+		error_log('234234234!!!!!!!!!!!!!!!!!!');
+		$jsonSchema = $this->emDataService->getJsonScheme('submission', $this);
+		$props[] = 'enh_'.$jsonSchema['form'].'_'.$jsonSchema['version'];
 	}
 
 	/**
@@ -101,8 +107,8 @@ class EnhancedMetadataPlugin extends GenericPlugin
 	{
 		$request = PKPApplication::getRequest();
 		$templateMgr = TemplateManager::getManager($request);
-		$templateMgr->assign('enhMetaDataStyle', $request->getBaseUrl() . '/' . $this->getPluginPath() . '/style/enhancedMetadata.css');
-		$templateMgr->assign('enhMetaDataScript', $request->getBaseUrl() . '/' . $this->getPluginPath() . '/js/enhancedMetadata.js');
+		$templateMgr->assign('enhMetaDataStyle', $request->getBaseUrl().'/'.$this->getPluginPath().'/style/enhancedMetadata.css');
+		$templateMgr->assign('enhMetaDataScript', $request->getBaseUrl().'/'.$this->getPluginPath().'/js/enhancedMetadata.js');
 		$templateMgr->assign("tmplRes", $this->getTemplateResource());
 		/*
 		 * TODO doesn't work
@@ -120,12 +126,13 @@ class EnhancedMetadataPlugin extends GenericPlugin
 					$templateMgr->registerFilter("output", array($this, 'addViewFilter'));
 					break;
 				case 'AdvancedSearchReviewerForm':
-					error_log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
 					$submission = $form->getSubmission();
 					$jsonSchema = $this->emDataService->getJsonScheme('submission', $this);
-					$jsonData = $submission->getData('enh_' . $jsonSchema['form'] . '_' . $jsonSchema['version']);
-					if (isset($jsonData))
+					$jsonData = $submission->getData('enh_'.$jsonSchema['form'].'_'.$jsonSchema['version']);
+					if (isset($jsonData)) {
 						$jsonData = json_decode($jsonData, true);
+					}
 					$viewArray = [];
 					if ($jsonSchema && isset($jsonSchema['items']) && isset($jsonData)) {
 						foreach ($jsonSchema['items'] as $item) {
@@ -137,7 +144,8 @@ class EnhancedMetadataPlugin extends GenericPlugin
 											'title' => $formItem['title'],
 											'type' => $formItem['notifyType'],
 											'list' => $formItem['list'],
-											'content' => $content];
+											'content' => $content,
+										];
 									}
 								}
 							}
@@ -152,6 +160,7 @@ class EnhancedMetadataPlugin extends GenericPlugin
 			$output =& $params[2];
 			$output .= $smarty->fetch($this->getTemplateResource('submissionMetaData.tpl'));
 		}
+
 		return false;
 	}
 
@@ -172,7 +181,7 @@ class EnhancedMetadataPlugin extends GenericPlugin
 			if (isset($formObject) && $version && intval($version) && $version > 0) {
 				$json = null;
 				do {
-					$json = $formObject->getData('enh_' . $jsonSchema['form'] . '_' . $version--);
+					$json = $formObject->getData('enh_'.$jsonSchema['form'].'_'.$version--);
 				} while ($json == null && $version > 0);
 				if ($json) {
 					$form->setData('enhMetaDataJson', json_decode($json, true));
@@ -182,6 +191,7 @@ class EnhancedMetadataPlugin extends GenericPlugin
 				$form->setData('hideFormElements', json_encode(["userGroupId"]));
 			}
 		}
+
 		return false;
 	}
 
@@ -199,9 +209,11 @@ class EnhancedMetadataPlugin extends GenericPlugin
 		if (isset($jsonSchema) && isset($jsonSchema['items'])) {
 			$names = $this->emDataService->getNameParam($jsonSchema['items']);
 			$this->addChecks($form, $jsonSchema['items']);
-			foreach ($names as $name)
+			foreach ($names as $name) {
 				$userVars[] = $name;
+			}
 		}
+
 		return false;
 	}
 
@@ -231,14 +243,19 @@ class EnhancedMetadataPlugin extends GenericPlugin
 		$formObject = null;
 		$jsonSchema = null;
 		$this->getFormObjectAndJSON($form, $formObject, $jsonSchema);
+		$request = Application::get()->getRequest();
 		if (isset($formObject) && isset($jsonSchema) && isset($jsonSchema['items'])) {
 			$enhData = [];
 			$names = $this->emDataService->getNameParam($jsonSchema['items']);
 			foreach ($names as $name) {
 				$enhData[$name] = $form->getData($name);
 			}
-			$formObject->setData('enh_' . $jsonSchema['form'] . '_' . $jsonSchema['version'], json_encode($enhData));
+			$params = ['enh_'.$jsonSchema['form'].'_'.$jsonSchema['version'], json_encode($enhData)];
+			Services::get('publication')->edit($formObject->getCurrentPublication(), $params, $request);
+			$formObject->setData('enh_'.$jsonSchema['form'].'_'.$jsonSchema['version'], json_encode($enhData));
+
 		}
+
 		return false;
 	}
 
@@ -251,8 +268,10 @@ class EnhancedMetadataPlugin extends GenericPlugin
 	{
 		$form =& $params[0];
 		$jsonSchema = null;
+		error_log("sdfssssss!!!!!!!!!!!!!!!!!!!!!!!!");
+		error_log(get_class($form));
 		switch (get_class($form)) {
-			case 'ArticleDAO':
+			case 'SubmissionDAO':
 				$jsonSchema = $this->emDataService->getJsonScheme('submission', $this);
 				break;
 			case 'AuthorDAO':
@@ -264,8 +283,9 @@ class EnhancedMetadataPlugin extends GenericPlugin
 		}
 		if (isset($jsonSchema)) {
 			$fields =& $params[1];
-			$fields[] = 'enh_' . $jsonSchema['form'] . '_' . $jsonSchema['version'];
+			$fields[] = 'enh_'.$jsonSchema['form'].'_'.$jsonSchema['version'];
 		}
+
 		return false;
 	}
 
@@ -280,23 +300,28 @@ class EnhancedMetadataPlugin extends GenericPlugin
 			$newOutput .= substr($output, $offset + strlen($match));
 			$output = $newOutput;
 			$templateMgr->unregisterFilter('output', array($this, 'addViewFilter'));
-		} else if (preg_match('/<fieldset\s*id="\s*fileMetaData\s*"\s*>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
-			$match = $matches[0][0];
-			$offset = $matches[0][1];
-			$newOutput = substr($output, 0, $offset);
-			$newOutput .= $templateMgr->fetch($this->getTemplateResource('submissionMetaData.tpl'));
-			$newOutput .= substr($output, $offset);
-			$output = $newOutput;
-			$templateMgr->unregisterFilter('output', array($this, 'addViewFilter'));
-		} else if (preg_match('/<p><span class="formRequired">/', $output, $matches, PREG_OFFSET_CAPTURE)) {
-			$match = $matches[0][0];
-			$offset = $matches[0][1];
-			$newOutput = substr($output, 0, $offset);
-			$newOutput .= $templateMgr->fetch($this->getTemplateResource('submissionMetaData.tpl'));
-			$newOutput .= substr($output, $offset);
-			$output = $newOutput;
-			$templateMgr->unregisterFilter('output', array($this, 'addViewFilter'));
+		} else {
+			if (preg_match('/<fieldset\s*id="\s*fileMetaData\s*"\s*>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
+				$match = $matches[0][0];
+				$offset = $matches[0][1];
+				$newOutput = substr($output, 0, $offset);
+				$newOutput .= $templateMgr->fetch($this->getTemplateResource('submissionMetaData.tpl'));
+				$newOutput .= substr($output, $offset);
+				$output = $newOutput;
+				$templateMgr->unregisterFilter('output', array($this, 'addViewFilter'));
+			} else {
+				if (preg_match('/<p><span class="formRequired">/', $output, $matches, PREG_OFFSET_CAPTURE)) {
+					$match = $matches[0][0];
+					$offset = $matches[0][1];
+					$newOutput = substr($output, 0, $offset);
+					$newOutput .= $templateMgr->fetch($this->getTemplateResource('submissionMetaData.tpl'));
+					$newOutput .= substr($output, $offset);
+					$output = $newOutput;
+					$templateMgr->unregisterFilter('output', array($this, 'addViewFilter'));
+				}
+			}
 		}
+
 		return $output;
 	}
 
@@ -310,7 +335,16 @@ class EnhancedMetadataPlugin extends GenericPlugin
 						case 'text':
 						case 'textarea';
 							/* TODO Message */
-							$form->addCheck(new FormValidatorLength($form, $field['name'] . '[en_US]', 'optional', 'user.register.form.passwordLengthRestriction', '<=', $field['maxLength']));
+							$form->addCheck(
+								new FormValidatorLength(
+									$form,
+									$field['name'].'[en_US]',
+									'optional',
+									'user.register.form.passwordLengthRestriction',
+									'<=',
+									$field['maxLength']
+								)
+							);
 							break;
 					}
 
@@ -328,6 +362,7 @@ class EnhancedMetadataPlugin extends GenericPlugin
 	{
 		$router = $request->getRouter();
 		import('lib.pkp.classes.linkAction.request.AjaxModal');
+
 		return array_merge(
 			$this->getEnabled() ? array(
 				new LinkAction(
@@ -358,14 +393,17 @@ class EnhancedMetadataPlugin extends GenericPlugin
 				$form = new EnhancedMetadataSettingsForm($this);
 				if (!$request->getUserVar('save')) {
 					$form->initData();
+
 					return new JSONMessage(true, $form->fetch($request));
 				}
 				$form->readInputData();
 				if ($form->validate()) {
 					$form->execute();
+
 					return new JSONMessage(true);
 				}
 		}
+
 		return parent::manage($args, $request);
 	}
 
@@ -396,6 +434,7 @@ class EnhancedMetadataPlugin extends GenericPlugin
 					$jsonSchema = $this->emDataService->getJsonScheme('author', $this);
 					break;
 			}
+
 	}
 
 }
