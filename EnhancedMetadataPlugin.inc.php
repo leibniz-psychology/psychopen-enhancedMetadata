@@ -53,7 +53,7 @@ class EnhancedMetadataPlugin extends GenericPlugin
 		$context = $request->getContext();
 		$user = $request->getUser();
 		if(isset($user) && isset($context)) {
-			$accessViaRole = $user->hasRole(array(ROLE_ID_AUTHOR, ROLE_ID_MANAGER), $context->getId());
+			$accessViaRole = $user->hasRole(array(ROLE_ID_AUTHOR, ROLE_ID_MANAGER, ROLE_ID_SUB_EDITOR), $context->getId());
 			if ($success && $this->getEnabled() && $accessViaRole) {
 				// Add metadata fields to submission
 				HookRegistry::register('Templates::Submission::SubmissionMetadataForm::AdditionalMetadata', array($this, 'metadataFormDisplay'));
